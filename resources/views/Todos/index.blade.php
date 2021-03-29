@@ -12,16 +12,34 @@
         <x-alert />
         @foreach($todos as $todo)
         <li class="flex justify-between p-2 ">
-            @if($todo->completed)
+        <div>
+        @include('todos.CompleteButton')
+        </div>
+
+        @if($todo->completed)
             <p class="line-through">{{$todo->title}}</p>
             @else
             <p>{{$todo->title}}</p>
-            @endif
+        @endif
             <div>
                 
                 <a href="{{'/todos/'.$todo->id.'/edit'}}" class=" text-yellow-400 cursor pointer text-white">
                 <span class="fas fa-edit  px-2"></a>
-                @include('todos.CompleteButton')
+
+                <span class="fas fa-trash text-red-500  px-2 cursor-pointer" 
+                onclick ="event.preventDefault();
+                        if(confirm('Are you sure you want to delete this task?')){
+                        document.getElementById('form-delete-{{$todo->id}}')
+                        .submit()
+                        }"/>
+                        
+                <form style="display:none" id="{{'form-delete-'.$todo->id}}" method="post"
+                action="{{route('todo.delete',$todo->id)}}">
+                @csrf
+                @method('delete')
+                </form>
+
+
             </div>
         </li>
         @endforeach
