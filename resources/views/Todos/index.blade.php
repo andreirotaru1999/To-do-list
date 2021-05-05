@@ -9,7 +9,7 @@
     </a>
 </div>
     <ul class="my-5">
-        <x-alert />
+        
         @foreach($todos as $todo)
         <li class="flex justify-between p-2 ">
         <div>

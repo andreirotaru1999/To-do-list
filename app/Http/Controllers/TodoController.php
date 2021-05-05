@@ -8,9 +8,14 @@ use App\Http\Requests\TodoCreateRequest;
 
 class TodoController extends Controller
 {
+     public function __construct()
+     {
+        $this->middleware('auth');
+     }
+
     public function index()
     {
-        $todos = Todo::orderBy('completed', 'desc')->get();
+        $todos = Todo::orderBy('completed')->get();
         //return view('todos.index')->with(['todos' => $todos]);-longer version
         return view('todos.index', compact('todos'));
     }
@@ -22,6 +27,8 @@ class TodoController extends Controller
 
     public function store(TodoCreateRequest $request)
     {
+        $userId = auth()->id();
+        $request["user_id"] = $userId;
         Todo::create($request->all());
         return redirect()->back()->with('message','Todo created succesfully');
     }
